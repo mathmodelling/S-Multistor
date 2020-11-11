@@ -11,13 +11,31 @@ cat = pd.read_excel(ruta_catalogo, index_col=0, parse_dates=['Start', 'End'])
 print(cat.to_string())
 
 # Leer Caudales mensuales QL_1
-dm = pd.read_excel(ruta_mensuales, sheet_name='QL_1', parse_dates=['Fecha'], index_col='Fecha')
+dm = pd.read_excel(ruta_mensuales, sheet_name='QL_1', index_col='Fecha')
 print(dm.to_string())
 dm.plot(subplots=True, legend=True, layout=(4, 3), fontsize=8)
 plt.show()
 
 # Seleccionar estación de caudales de mi interes
-q = dm[[29037020]]
+q = pd.DataFrame(dm[29037020])
 print(type(q))
 q.plot()
 plt.show()
+
+# Rellenar vacios de forma lineal entre fechas
+q = q.interpolate(method='linear')
+q = q['1960':]
+
+# Convertir de serie de tiempo a grupos
+q['año'] = q.index.year
+q['mes'] = q.index.month
+print(q.head(20).to_string())
+# Crear grupos mensuales
+qm = q.pivot(index="año", columns="mes", values=29037020)
+print(qm.to_string())
+
+import statsmodels.api as sm
+decomposicion = sm.tsa.seasonal_decompose(q[29037020])
+fig = decomposicion.plot()
+plt.show()
+
