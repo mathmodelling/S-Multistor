@@ -34,8 +34,9 @@ print(q.head(20).to_string())
 qm = q.pivot(index="año", columns="mes", values=29037020)
 print(qm.to_string())
 
+# Por etiqueta PEP8 todas las clausulas para usar import deben ir
+# en la parte inicial del script :-(
 import statsmodels.api as sm
 decomposicion = sm.tsa.seasonal_decompose(q[29037020])
 fig = decomposicion.plot()
 plt.show()
-
