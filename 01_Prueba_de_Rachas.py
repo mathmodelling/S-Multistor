@@ -37,7 +37,7 @@ def evaluar_rachas(xls_in, xls_out):
     # Pasos preparativos:
 
     # Leemos el libro de Excel
-    libro = pd.ExcelFile(excel_entrada)
+    libro = pd.ExcelFile(xls_in)
     # Establecemos la lista de pestañas y leemos cada una de ellas en un ciclo
     pestanas = libro.sheet_names
     print(pestanas)
@@ -46,18 +46,19 @@ def evaluar_rachas(xls_in, xls_out):
     Rachas_Test = pd.DataFrame()
     Resumen_Rachas = pd.DataFrame()
     # Libro para guardar resultado de la prueba de Rachas
-    libro = pd.ExcelWriter(excel_salida)
+    libro = pd.ExcelWriter(xls_out)
 
     # Paso 1: Ciclo de lectura de datos por pestañas y aplicación prueba de rachas
     for p in pestanas:
         print('Trabajando pestaña:', p)
-        datos = pd.read_excel(excel_entrada, sheet_name=p, index_col=0)
+        datos = pd.read_excel(xls_in, sheet_name=p, index_col=0)
         mindex = datos.index.values
         print('mindex', mindex)
         # Paso 2.1 De acuerdo con la prueba de rachas obtenemos los promedios para cada mes
         promedios = datos.mean()
 
-        # Paso 1.2 Obtenemos un data frame cambiando datos por signos[Si el dato es mayor o igual que el promedio del mes este sa cambia por un "+"]
+        # Paso 1.2 Obtenemos un data frame cambiando datos por signos[Si el dato es mayor o igual que el
+        # promedio del mes este sa cambia por un "+"]
         # de lo contrario el dato se cambia por un "-"
         # Para comparar se imprime el dataframe antes del cambio
         print(datos.to_string())
@@ -108,6 +109,11 @@ def evaluar_rachas(xls_in, xls_out):
 if __name__ == "__main__":
     # execute only if run as a script
     # Primer paso: Definición de rutas para lectura y guardado de archivos de Excel
-    excel_entrada = 'Data/grupos_mensuales.xlsx'
-    excel_salida = 'Precipitaciones_Prueba_de_Rachas.xlsx'
-    evaluar_rachas(excel_entrada, excel_salida)
+    excel_entrada1 = 'Data/serie_mensual_caudales.xlsx'
+    excel_salida1 = 'Data/rachas_caudales_serie_mensual.xlsx'
+    evaluar_rachas(excel_entrada1, excel_salida1)
+
+    excel_entrada2 = 'Data/grupos_mensuales.xlsx'
+    excel_salida2 = 'Data/rachas_grupos_mensuales.xlsx'
+    evaluar_rachas(excel_entrada2, excel_salida2)
+

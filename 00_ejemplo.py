@@ -13,14 +13,14 @@ print(cat.to_string())
 # Leer Caudales mensuales QL_1
 dm = pd.read_excel(ruta_mensuales, sheet_name='QL_1', index_col='Fecha')
 print(dm.to_string())
-dm.plot(subplots=True, legend=True, layout=(4, 3), fontsize=8)
-plt.show()
+# dm.plot(subplots=True, legend=True, layout=(4, 3), fontsize=8)
+# plt.show()
 
 # Seleccionar estación de caudales de mi interes
 q = pd.DataFrame(dm[29037020])
 print(type(q))
-q.plot()
-plt.show()
+# q.plot()
+# plt.show()
 
 # Rellenar vacios de forma lineal entre fechas
 q = q.interpolate(method='linear')
@@ -39,4 +39,16 @@ print(qm.to_string())
 import statsmodels.api as sm
 decomposicion = sm.tsa.seasonal_decompose(q[29037020])
 fig = decomposicion.plot()
-plt.show()
+# plt.show()
+
+qm.columns = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN',
+              'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
+
+qm.to_excel('Data/grupos_mensuales.xlsx', sheet_name='Caudales')
+
+print(q)
+q = q.drop(['año', 'mes'], axis=1)
+q.to_excel('Data/serie_mensual_caudales.xlsx', sheet_name='29037020')
+
+
+
